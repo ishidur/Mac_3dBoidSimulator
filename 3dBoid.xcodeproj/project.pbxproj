@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		0F82DA1B1EC7F980005AA181 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F82DA1A1EC7F980005AA181 /* main.cpp */; };
+		0F82DA231EC7F991005AA181 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F82DA221EC7F991005AA181 /* OpenGL.framework */; };
+		0F82DA251EC7F9A1005AA181 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F82DA241EC7F9A1005AA181 /* GLUT.framework */; };
+		0F82DA301EC7FA1E005AA181 /* BaseBoid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F82DA261EC7FA1E005AA181 /* BaseBoid.cpp */; };
+		0F82DA311EC7FA1E005AA181 /* Block.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F82DA281EC7FA1E005AA181 /* Block.cpp */; };
+		0F82DA321EC7FA1F005AA181 /* Direction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F82DA2A1EC7FA1E005AA181 /* Direction.cpp */; };
+		0F82DA331EC7FA1F005AA181 /* Grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F82DA2D1EC7FA1E005AA181 /* Grid.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +31,18 @@
 /* Begin PBXFileReference section */
 		0F82DA171EC7F980005AA181 /* 3dBoid */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = 3dBoid; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F82DA1A1EC7F980005AA181 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		0F82DA221EC7F991005AA181 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		0F82DA241EC7F9A1005AA181 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		0F82DA261EC7FA1E005AA181 /* BaseBoid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseBoid.cpp; sourceTree = "<group>"; };
+		0F82DA271EC7FA1E005AA181 /* BaseBoid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BaseBoid.hpp; sourceTree = "<group>"; };
+		0F82DA281EC7FA1E005AA181 /* Block.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Block.cpp; sourceTree = "<group>"; };
+		0F82DA291EC7FA1E005AA181 /* Block.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Block.hpp; sourceTree = "<group>"; };
+		0F82DA2A1EC7FA1E005AA181 /* Direction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Direction.cpp; sourceTree = "<group>"; };
+		0F82DA2B1EC7FA1E005AA181 /* Direction.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Direction.hpp; sourceTree = "<group>"; };
+		0F82DA2C1EC7FA1E005AA181 /* Eigen */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Eigen; sourceTree = "<group>"; };
+		0F82DA2D1EC7FA1E005AA181 /* Grid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Grid.cpp; sourceTree = "<group>"; };
+		0F82DA2E1EC7FA1E005AA181 /* Grid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Grid.hpp; sourceTree = "<group>"; };
+		0F82DA2F1EC7FA1E005AA181 /* parameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parameter.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +50,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F82DA251EC7F9A1005AA181 /* GLUT.framework in Frameworks */,
+				0F82DA231EC7F991005AA181 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +63,7 @@
 			children = (
 				0F82DA191EC7F980005AA181 /* 3dBoid */,
 				0F82DA181EC7F980005AA181 /* Products */,
+				0F82DA211EC7F991005AA181 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -57,9 +78,28 @@
 		0F82DA191EC7F980005AA181 /* 3dBoid */ = {
 			isa = PBXGroup;
 			children = (
+				0F82DA261EC7FA1E005AA181 /* BaseBoid.cpp */,
+				0F82DA271EC7FA1E005AA181 /* BaseBoid.hpp */,
+				0F82DA281EC7FA1E005AA181 /* Block.cpp */,
+				0F82DA291EC7FA1E005AA181 /* Block.hpp */,
+				0F82DA2A1EC7FA1E005AA181 /* Direction.cpp */,
+				0F82DA2B1EC7FA1E005AA181 /* Direction.hpp */,
+				0F82DA2C1EC7FA1E005AA181 /* Eigen */,
+				0F82DA2D1EC7FA1E005AA181 /* Grid.cpp */,
+				0F82DA2E1EC7FA1E005AA181 /* Grid.hpp */,
+				0F82DA2F1EC7FA1E005AA181 /* parameter.h */,
 				0F82DA1A1EC7F980005AA181 /* main.cpp */,
 			);
 			path = 3dBoid;
+			sourceTree = "<group>";
+		};
+		0F82DA211EC7F991005AA181 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0F82DA241EC7F9A1005AA181 /* GLUT.framework */,
+				0F82DA221EC7F991005AA181 /* OpenGL.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,7 +159,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F82DA311EC7FA1E005AA181 /* Block.cpp in Sources */,
+				0F82DA301EC7FA1E005AA181 /* BaseBoid.cpp in Sources */,
 				0F82DA1B1EC7F980005AA181 /* main.cpp in Sources */,
+				0F82DA321EC7FA1F005AA181 /* Direction.cpp in Sources */,
+				0F82DA331EC7FA1F005AA181 /* Grid.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
