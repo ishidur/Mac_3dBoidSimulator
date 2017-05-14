@@ -20,15 +20,49 @@ public:
     double right;
     double top;
     double bottom;
+    double front;
+    double back;
     std::vector<int> boidIndexes;
     std::vector<int> blockIndexes;
-    Grid(double _top = 0.0, double _bottom = 0.0, double _left = 0.0, double _right = 0.0);
+    
+    /**
+     * \brief
+     * \param top
+     * \param bottom
+     * \param left
+     * \param right
+     */
+    Grid(double top = 0.0, double bottom = 0.0, double left = 0.0, double right = 0.0, double front = 0.0, double back = 0.0);
+    /**
+     * \brief
+     * \param index
+     */
     void addBoidByIndex(int index);
+    /**
+     * \brief
+     * \param index
+     */
     void deleteBoidByIndex(int index);
+    /**
+     * \brief
+     * \param index
+     * \return
+     */
     bool findBoidByIndex(int index);
+    /**
+     * \brief
+     * \param index
+     */
     void addBlockByIndex(int index);
+    /**
+     * \brief
+     * \param index
+     */
     void deleteBlockByIndex(int index);
-    void deleteAllBoids();
+    /**
+     * \brief
+     */
     void deleteAllBlocks();
 };
+
 #endif /* Grid_hpp */

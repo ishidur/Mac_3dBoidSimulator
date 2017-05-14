@@ -9,12 +9,14 @@
 #include "Grid.hpp"
 #include <vector>
 #include <algorithm>
-Grid::Grid(double _top, double _bottom, double _left, double _right)
+Grid::Grid(double _top, double _bottom, double _left, double _right, double _front, double _back)
 {
     left = _left;
     right = _right;
     top = _top;
     bottom = _bottom;
+    front = _front;
+    back = _back;
 }
 void Grid::addBoidByIndex(int index)
 {
@@ -36,10 +38,6 @@ bool Grid::findBoidByIndex(int index)
         return true;
     }
     return false;
-}
-void Grid::deleteAllBoids()
-{
-    boidIndexes.clear();
 }
 void Grid::addBlockByIndex(int index)
 {

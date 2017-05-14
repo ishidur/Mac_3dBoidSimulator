@@ -15,28 +15,32 @@
 class Direction
 {
 public:
-    double angle;
+    double angleY;
+    double angleZ;
     double x;
     double y;
-    Eigen::Vector2d vector;
+    double z;
+    Eigen::Vector3d vector;
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     
     /**
      * \brief
-     * \param _angle
+     * \param angleY
+     * \param angleZ
      */
-    Direction(double _angle);
+    Direction(double angleY, double angleZ);
     /**
      * \brief
-     * \param _x
-     * \param _y
+     * \param x
+     * \param y
+     * \param z
      */
-    Direction(double _x, double _y);
+    Direction(double x, double y, double z);
     /**
      * \brief
-     * \param point
+     * \param vector
      */
-    Direction(Eigen::Vector2d& point);
+    Direction(Eigen::Vector3d& vector);
 };
 
 #endif /* Direction_hpp */
