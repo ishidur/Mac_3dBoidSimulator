@@ -9,8 +9,8 @@
 #ifndef parameter_h
 #define parameter_h
 /*parameters*/
-#define GRID_NO 4 //number of grid; boid can see around 1 grid
-#define BOID_SIZE 5.0 //size of boid
+#define GRID_NO 8 //number of grid; boid can see around 1 grid
+#define BOID_SIZE 10.0 //size of boid
 #define WALL_SIZE 5.0 //size of wall
 #define BLOCK_SIZE 10.0 //size of block
 #define BOID_SPEED 3.0 //initial boid speed
@@ -18,7 +18,7 @@
 #define BLOCK_NO 0 //number of blocks
 #define FLAME_RATE 100 //rerender after this FLAME_RATE milliseconds
 #define WINDOW_SIZE 600 //window size
-#define BOUNDARY 100.0 //area boundary
+#define BOUNDARY 200.0 //area boundary
 #define REPEL_WALL_WEIGHT 30.0 //repel force weight
 #define ALPHA_1 0.5 //rule1 weight
 #define ALPHA_2 1.1 //rule2 weight
@@ -33,6 +33,6 @@
 #define THETA_2 240.0 //rule2 view angle
 #define THETA_3 240.0 //rule3 view angle
 #define THETA_4 240.0 //rule4 view angle
-#define BETA 40.0 //boid speed factor
+#define BETA 60.0 //boid speed factor
 
 #endif /* parameter_h */

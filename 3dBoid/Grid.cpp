@@ -10,7 +10,7 @@
 #include <vector>
 #include <algorithm>
 
-Grid::Grid(double _top, double _bottom, double _left, double _right, double _front, double _back)
+Grid::Grid(double _left, double _right, double _top, double _bottom, double _front, double _back)
 {
     left = _left;
     right = _right;

@@ -220,7 +220,7 @@ void createGrids()
             front = -BOUNDARY - width;
             for (int k = 0; k < GRID_NO + 2; ++k)
             {
-                grids[i][j][k] = Grid(top, top + width, left, left + width, front, front + width);
+                grids[i][j][k] = Grid(left, left + width, top, top + width,  front, front + width);
                 front += width;
             }
             left += width;
@@ -258,13 +258,12 @@ void findGrid(int index, double x, double y, double z)
     int gridx = int(ceil((BOUNDARY + x) / width));
     int gridy = int(ceil((BOUNDARY + y) / width));
     int gridz = int(ceil((BOUNDARY + z) / width));
-    grids[gridy][gridx][gridz].addBoidByIndex(index);
+    grids[gridx][gridy][gridz].addBoidByIndex(index);
     boids[index].grid_x = gridx;
     boids[index].grid_y = gridy;
     boids[index].grid_z = gridz;
 }
 
-//BUG: whaaaat
 void whereBlock(int index, double x, double y, double z)
 {
     double width = 2.0 * BOUNDARY / GRID_NO;
@@ -408,7 +407,7 @@ void resize(int w, int h)
     /* 透視変換行列の設定 */
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(120.0, double(w) / double(h), 0.0001, double(w) / WINDOW_SIZE * BOUNDARY * 3.0);
+    gluPerspective(120.0, double(w) / double(h), 0.0001, double(w) / WINDOW_SIZE * BOUNDARY * 4.0);
     
     /* モデルビュー変換行列の設定 */
     glMatrixMode(GL_MODELVIEW);
