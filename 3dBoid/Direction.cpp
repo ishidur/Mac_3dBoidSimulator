@@ -8,6 +8,7 @@
 
 #include "Direction.hpp"
 #include <cmath>
+
 Direction::Direction(double _angleY, double _angleZ)
 {
     angleY = _angleY;
@@ -43,15 +44,16 @@ Direction::Direction(Eigen::Vector3d& v)
     x = v.x() / dist;
     y = v.y() / dist;
     z = v.z() / dist;
-    vector = Eigen::Vector3d(x, y, z);
+    vector = v.normalized();
     angleZ = asin(v.y() / dist);
-    double distXZ = sqrt(v.x() * v.x() + v.z() * v.z());
-    if (v.z() >= 0.0)
+    double distXZ = sqrt(x * x + z * z);
+    
+    if (z >= 0.0)
     {
-        angleY = acos(v.y() / distXZ);
+        angleY = acos(x / distXZ);
     }
     else
     {
-        angleY = -acos(v.y() / distXZ);
+        angleY = -acos(x / distXZ);
     }
 }

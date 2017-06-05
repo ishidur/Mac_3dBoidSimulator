@@ -12,7 +12,7 @@
 #include "Direction.hpp"
 #include "math.h"
 #include "parameter.h" //import common parameters
-//‹«ŠEðŒ: •Ç
+
 double checkBoundary(double pos)
 {
     if (pos > BOUNDARY - WALL_SIZE)
@@ -29,6 +29,13 @@ double checkBoundary(double pos)
 double radianToDegree(double rad)
 {
     return rad * 180.0 / M_PI;
+}
+
+void renderBoid()
+{
+    //	glRotated(90.0, 0.0, 1.0, 0.0);
+    //	glutSolidCone(0.4 * BOID_SIZE * sqrt(3.0) / 2.0, BOID_SIZE, 10, 10);
+    glutSolidTeapot(BOID_SIZE);
 }
 
 BaseBoid::BaseBoid(double _x, double _y, double _z, double _angleY, double _angleZ, double _speed, int _id)
@@ -50,15 +57,16 @@ void BaseBoid::setColor(double red, double green, double blue)
     b = blue;
 }
 
-void BaseBoid::drawBaseBoid() //TODO:’¹‚ç‚µ‚­
+void BaseBoid::drawBaseBoid()
 {
     GLfloat color[] = {GLfloat(r),GLfloat(g),GLfloat(b),1.0};
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
+    glColor3d(r, g, b);
     glPushMatrix();
     glTranslated(x, y, z);
     glRotated(radianToDegree(angleY), 0.0, -1.0, 0.0);
     glRotated(radianToDegree(angleZ), 0.0, 0.0, 1.0);
-    glutSolidCone(-0.4 * BOID_SIZE * sqrt(3.0) / 2.0, BOID_SIZE, 10, 10);
+    renderBoid();
     glPopMatrix();
 }
 
@@ -72,30 +80,23 @@ void BaseBoid::updatePosition()
     z = checkBoundary(z);
 }
 
-//currently not working
+double inner(Eigen::Vector3d a, Eigen::Vector3d b)
+{
+    return a.x() * b.x() + a.y() * b.y() + a.z() * b.z();
+}
+
 bool BaseBoid::isVisible(double _x, double _y, double _z, double _viewAngle)
 {
-    //	double dx = _x - x;
-    //	double dy = _y - y;
-    //	Direction bDirection = Direction(dx, dy);
-    //	double maxAngle = angleY + _viewAngle;
-    //	double minAngle = angleY - _viewAngle;
-    //
-    //	bool max = maxAngle > M_PI ? bDirection.angle > maxAngle - 2.0 * M_PI : bDirection.angle > maxAngle;
-    //	bool min = minAngle < -M_PI ? bDirection.angle < minAngle + 2.0 * M_PI : bDirection.angle < minAngle;
-    //	if (maxAngle <= M_PI && minAngle > -M_PI)
-    //	{
-    //		if (max || min)
-    //		{
-    //			return false;
-    //		}
-    //	}
-    //	else
-    //	{
-    //		if (max && min)
-    //		{
-    //			return false;
-    //		}
-    //	}
+    double dx = _x - x;
+    double dy = _y - y;
+    double dz = _z - z;
+    //	Direction bDirection = Direction(dx, dy, dz);
+    Eigen::Vector3d dist = Eigen::Vector3d(dx, dy, dz);
+    double innertial = inner(vctr.normalized(), dist.normalized());
+    double angle = acos(innertial);
+    if (angle > _viewAngle)
+    {
+        return false;
+    }
     return true;
 }
