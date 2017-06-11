@@ -64,7 +64,20 @@ std::vector<int> getAroundGridBoids(int id, int grid_x, int grid_y, int grid_z)
 }
 
 std::vector<BaseBoid> boids;
+std::vector<std::pair<int, int>> boidConnections;
 
+void addConnections(std::pair<int, int> newConnection)
+{
+    boidConnections.push_back(newConnection);
+    std::sort(boidConnections.begin(), boidConnections.end());
+    auto result = std::unique(boidConnections.begin(), boidConnections.end());
+    boidConnections.erase(result, boidConnections.end());
+}
+
+void removeAllConnections()
+{
+    boidConnections.clear();
+}
 
 double degreeToRadian(double deg)
 {
@@ -100,6 +113,20 @@ BaseBoid updateSpeedAndAngle(BaseBoid& boid)
             }
             if (dist - 2.0 * BOID_SIZE < R_1)
             {
+                int first;
+                int second;
+                if (boid.id < boids[i].id)
+                {
+                    first = boid.id;
+                    second = boids[i].id;
+                }
+                else
+                {
+                    first = boids[i].id;
+                    second = boid.id;
+                }
+                std::pair<int, int> connection = std::make_pair(first, second);
+                addConnections(connection);
                 /*rule1*/
                 n1++;
                 q1 += boids[i].vctr.normalized();
@@ -376,6 +403,20 @@ void drawWall()
     glEnd();
 }
 
+void drawConnections()
+{
+    glColor3d(1.0, 1.0, 1.0);
+    GLfloat color[] = {1.0, 1.0, 1.0, 1.0};
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
+    for (auto pair: boidConnections)
+    {
+        glBegin(GL_LINES);
+        glVertex3d(boids[pair.first].x, boids[pair.first].y, boids[pair.first].z);
+        glVertex3d(boids[pair.second].x, boids[pair.second].y, boids[pair.second].z);
+        glEnd();
+    }
+}
+
 void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -397,6 +438,7 @@ void display(void)
             block.drawBlock();
         }
     }
+    drawConnections();
     glFlush();
 }
 
@@ -485,6 +527,7 @@ void timer(int value)
     //	{
     //		cout << tim / 10 << endl;
     //	}
+    removeAllConnections();
     for (int i = 0; i < boids.size(); i++)
     {
         boids[i].updatePosition();
