@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "Eigen/Core"
+#include "parameter.h"
 
 
 class BaseBoid
@@ -24,6 +25,7 @@ public:
     double x; //_x-position
     double y; //y-position
     double z; //z-position
+    double size; //z-position
     double angleY; //radian angle: 0 vector is (0, 1)
     double angleZ; //radian angle: 0 vector is (0, 1)
     Eigen::Vector3d vctr; //
@@ -32,19 +34,8 @@ public:
     int grid_x = -1; //grid address x
     int grid_z = -1; //grid address z
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-    
-    /**
-     * \brief
-     * \param x
-     * \param y
-     * \param angleY
-     * \param angleZ
-     * \param speed
-     * \param id
-     */
-    BaseBoid(double x = 0.0, double y = 0.0, double angleY = 0.0, double angleZ = 0.0, double speed = 0.0, int id = -1);
-    
-    BaseBoid(double _x, double _y, double _z, double _angleY, double _angleZ, double _speed, int _id);
+  
+    BaseBoid(double x = 0.0, double y = 0.0, double z = 0.0, double angleY = 0.0, double angleZ = 0.0, double speed = 0.0, double size = BOID_SIZE, int id = -1);
     /**
      * \brief
      * \param red

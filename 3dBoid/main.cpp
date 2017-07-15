@@ -22,9 +22,10 @@
 #include "Eigen/Core"
 
 int tim = 0; //time
-bool isPress = false;
+int mouseState = 0; //0 is not pressed, 1 is distractor, 2 is attractor
 double mouseX = 0.0;
 double mouseY = 0.0;
+double mouseZ = 0.0;
 GLfloat light0pos[] = {0.0, 0.0, BOUNDARY, 1.0};
 GLfloat light1pos[] = {0.0, 0.0, BOUNDARY, 1.0};
 
@@ -111,7 +112,7 @@ BaseBoid updateSpeedAndAngle(BaseBoid& boid)
             {
                 boids[i].setColor(0.0, 1.0, 1.0);
             }
-            if (dist - 2.0 * BOID_SIZE < R_1)
+            if (dist - boid.size - boids[i].size < R_1)
             {
                 int first;
                 int second;
@@ -135,7 +136,7 @@ BaseBoid updateSpeedAndAngle(BaseBoid& boid)
                     boids[i].setColor(1.0, 1.0, 0.0);
                 }
             }
-            if (dist - 2.0 * BOID_SIZE < R_2)
+            if (dist - boid.size - boids[i].size < R_2)
             {
                 /*rule2*/
                 n2++;
@@ -145,7 +146,7 @@ BaseBoid updateSpeedAndAngle(BaseBoid& boid)
                     boids[i].setColor(1.0, 1.0, 0.0);
                 }
             }
-            if (dist - 2.0 * BOID_SIZE < R_3)
+            if (dist - boid.size - boids[i].size < R_3)
             {
                 /*rule3*/
                 n3++;
@@ -161,23 +162,40 @@ BaseBoid updateSpeedAndAngle(BaseBoid& boid)
     for (int n : grids[boid.grid_x][boid.grid_y][boid.grid_z].blockIndexes)
     {
         double dist = calcDist(boid.x, boid.y, boid.z, blocks[n].x, blocks[n].y, blocks[n].z);
-        if (dist - BLOCK_SIZE - BOID_SIZE <= R_4 && !blocks[n].disabled)
+        if (dist - BLOCK_SIZE - boid.size <= R_4 && !blocks[n].disabled)
         {
             /*rule4*/
             n4++;
             q4 += Eigen::Vector3d(blocks[n].x - boid.x, blocks[n].y - boid.y, blocks[n].z - boid.z) / dist / dist * R_4;
         }
+    } if (mouseState != 0)
+    {
+        double dist = calcDist(boid.x, boid.y, boid.z, mouseX, mouseY, mouseZ);
+        if (mouseState == 1)
+        {
+            if (dist - MOUSE_SIZE - boid.size <= R_4)
+            {
+                /*rule4*/
+                n4++;
+                q4 += MOUSE_DISTRACTION_FORCE * Eigen::Vector3d(mouseX - boid.x, mouseY - boid.y, mouseZ - boid.z) / dist / dist * R_4;
+            }
+        }
+        if (mouseState == 2)
+        {
+            if (true)
+            {
+                /*rule2*/
+                n2++;
+                q2 += MOUSE_ATTRACTION_FORCE * Eigen::Vector3d(mouseX - boid.x, mouseY - boid.y, mouseZ - boid.z) / dist / dist * R_2;
+            }
+            if (dist - MOUSE_SIZE - boid.size < R_3)
+            {
+                /*rule3*/
+                n3++;
+                q3 += MOUSE_ATTRACTION_FORCE * Eigen::Vector3d(mouseX - boid.x, mouseY - boid.y, mouseZ - boid.z) / dist / dist * R_3;
+            }
+        }
     }
-    //	if (isPress)
-    //	{
-    //		double dist = calcDist(boid.x, boid.y, mouseX, mouseY);
-    //		if (dist - BOID_SIZE <= R_4)
-    //		{
-    //			/*rule4*/
-    //			n4++;
-    //			q4 += Eigen::Vector3d(mouseX - boid.x, mouseY - boid.y) / dist / dist * R_4;
-    //		}
-    //	}
     if (n1 != 0)
     {
         q1 /= double(n1);
@@ -427,6 +445,7 @@ void display(void)
     glLightfv(GL_LIGHT1, GL_POSITION, light1pos);
     
     drawWall();
+    drawConnections();
     for (auto boid : boids)
     {
         boid.drawBaseBoid();
@@ -438,7 +457,29 @@ void display(void)
             block.drawBlock();
         }
     }
-    drawConnections();
+    if (mouseState!=0)
+    {
+        int slice = 10;
+        double r;
+        double g;
+        double b;
+        if (mouseState==1) {
+            r = 1.0;
+            g = 0.0;
+            b = 0.0;
+        }else{
+            r = 0.0;
+            g = 1.0;
+            b = 0.0;
+        }
+        GLfloat col[] = {GLfloat(r),GLfloat(g),GLfloat(b),1.0};
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, col);
+        glColor3d(r, g, b);
+        glPushMatrix();
+        glTranslated(mouseX,mouseY, mouseZ);
+        glutSolidSphere(MOUSE_SIZE, slice, slice);
+        glPopMatrix();
+    }
     glFlush();
 }
 
@@ -457,51 +498,34 @@ void resize(int w, int h)
     gluLookAt(0.0, 0.0, double(w) / WINDOW_SIZE * BOUNDARY * 1.5, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 }
 
-/*
+
  void mouse(int button, int state, int x, int y)
  {
-	double pos_x = BOUNDARY * (double(x) - WINDOW_SIZE / 2.0) / double(WINDOW_SIZE / 2.0);
-	double pos_y = -BOUNDARY * (double(y) - WINDOW_SIZE / 2.0) / double(WINDOW_SIZE / 2.0);
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
-	{
- int index = findDuplicateBlock(pos_x, pos_y);
- if (index != -1)
- {
- std::cout << "exist" << index << std::endl;
- removeBlock(index, pos_x, pos_y);
- }
- else
- {
- blocks.push_back(Block(pos_x, pos_y, BLOCK_SIZE));
- whereBlock(blocks.size() - 1, blocks[blocks.size() - 1].x, blocks[blocks.size() - 1].y);
- }
-	}
-	if (button == GLUT_RIGHT_BUTTON)
-	{
+// double pos_x = BOUNDARY * (double(x) - WINDOW_SIZE / 2.0) / double(WINDOW_SIZE / 2.0);
+// double pos_y = -BOUNDARY * (double(y) - WINDOW_SIZE / 2.0) / double(WINDOW_SIZE / 2.0);
  if (state == GLUT_DOWN)
  {
- std::cout << "pressing" << std::endl;
- mouseX = pos_x;
- mouseY = pos_y;
- isPress = true;
+ if (button == GLUT_LEFT_BUTTON)
+ {
+ std::cout << "distractor" << std::endl;
+// mouseX = pos_x;
+// mouseY = pos_y;
+ mouseState = 1;
+ }
+ if (button == GLUT_RIGHT_BUTTON)
+ {
+ std::cout << "attractor" << std::endl;
+// mouseX = pos_x;
+// mouseY = pos_y;
+ mouseState = 2;
+ }
  }
  else
  {
- isPress = false;
+ mouseState = 0;
  }
-	}
  }
- void motion(int x, int y)
- {
-	if (isPress)
-	{
- double pos_x = BOUNDARY * (double(x) - WINDOW_SIZE / 2.0) / double(WINDOW_SIZE / 2.0);
- double pos_y = -BOUNDARY * (double(y) - WINDOW_SIZE / 2.0) / double(WINDOW_SIZE / 2.0);
- mouseX = pos_x;
- mouseY = pos_y;
-	}
- }
- */
+ 
 
 void key(unsigned char key, int x, int y)
 {
@@ -575,14 +599,14 @@ int main(int argc, char* argv[])
     glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH);
     
     glutCreateWindow(argv[0]);
-    //	glutMouseFunc(mouse);
+    glutMouseFunc(mouse);
     glutKeyboardFunc(key);
     init();
     createGrids();
     
     for (int i = 0; i < BOIDS_NO; i++)
     {
-        boids.push_back(BaseBoid((double(rand()) - RAND_MAX / 2.0) * (BOUNDARY - WALL_SIZE - BOID_SIZE) * 2.0 / RAND_MAX, (double(rand()) - RAND_MAX / 2.0) * (BOUNDARY - WALL_SIZE - BOID_SIZE) * 2.0 / RAND_MAX, (double(rand()) - RAND_MAX / 2.0) * (BOUNDARY - WALL_SIZE - BOID_SIZE) * 2.0 / RAND_MAX, (double(rand()) / RAND_MAX) * 2.0 * M_PI, (double(rand()) / RAND_MAX) * 2.0 * M_PI, BOID_SPEED, i));
+        boids.push_back(BaseBoid((double(rand()) - RAND_MAX / 2.0) * (BOUNDARY - WALL_SIZE - BOID_SIZE) * 2.0 / RAND_MAX, (double(rand()) - RAND_MAX / 2.0) * (BOUNDARY - WALL_SIZE - BOID_SIZE) * 2.0 / RAND_MAX, (double(rand()) - RAND_MAX / 2.0) * (BOUNDARY - WALL_SIZE - BOID_SIZE) * 2.0 / RAND_MAX, (double(rand()) / RAND_MAX) * 2.0 * M_PI, (double(rand()) / RAND_MAX) * 2.0 * M_PI, BOID_SPEED, BOID_SIZE, i));
         findGrid(i, boids[i].x, boids[i].y, boids[i].z);
         if (i == 0)
         {

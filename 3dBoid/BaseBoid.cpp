@@ -31,14 +31,7 @@ double radianToDegree(double rad)
     return rad * 180.0 / M_PI;
 }
 
-void renderBoid()
-{
-    //	glRotated(90.0, 0.0, 1.0, 0.0);
-    //	glutSolidCone(0.4 * BOID_SIZE * sqrt(3.0) / 2.0, BOID_SIZE, 10, 10);
-    glutSolidTeapot(BOID_SIZE);
-}
-
-BaseBoid::BaseBoid(double _x, double _y, double _z, double _angleY, double _angleZ, double _speed, int _id)
+BaseBoid::BaseBoid(double _x, double _y, double _z, double _angleY, double _angleZ, double _speed, double _size, int _id)
 {
     id = _id;
     x = _x;
@@ -47,6 +40,7 @@ BaseBoid::BaseBoid(double _x, double _y, double _z, double _angleY, double _angl
     angleY = _angleY;
     angleZ = _angleZ;
     speed = _speed;
+    size = _size;
     vctr = Eigen::Vector3d(cos(_angleY) * cos(_angleZ) * _speed, sin(_angleZ) * _speed, sin(_angleY) * cos(_angleZ) * _speed);
 }
 
@@ -55,6 +49,13 @@ void BaseBoid::setColor(double red, double green, double blue)
     r = red;
     g = green;
     b = blue;
+}
+
+void renderBoid(double size)
+{
+    //	glRotated(90.0, 0.0, 1.0, 0.0);
+    //	glutSolidCone(0.4 * BOID_SIZE * sqrt(3.0) / 2.0, BOID_SIZE, 10, 10);
+    glutSolidTeapot(size);
 }
 
 void BaseBoid::drawBaseBoid()
@@ -66,7 +67,7 @@ void BaseBoid::drawBaseBoid()
     glTranslated(x, y, z);
     glRotated(radianToDegree(angleY), 0.0, -1.0, 0.0);
     glRotated(radianToDegree(angleZ), 0.0, 0.0, 1.0);
-    renderBoid();
+    renderBoid(size);
     glPopMatrix();
 }
 
