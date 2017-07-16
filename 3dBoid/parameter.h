@@ -22,7 +22,7 @@
 #define BOUNDARY 200.0 //area boundary
 #define REPEL_WALL_WEIGHT 30.0 //repel force weight
 #define MOUSE_DISTRACTION_FORCE 2.0 //repel force weight
-#define MOUSE_ATTRACTION_FORCE 4.0 //repel force weight
+#define MOUSE_ATTRACTION_FORCE 6.0 //repel force weight
 #define ALPHA_1 0.5 //rule1 weight
 #define ALPHA_2 1.1 //rule2 weight
 #define ALPHA_3 2.0 //rule3 weight
@@ -36,6 +36,6 @@
 #define THETA_2 240.0 //rule2 view angle
 #define THETA_3 240.0 //rule3 view angle
 #define THETA_4 240.0 //rule4 view angle
-#define BETA 60.0 //boid speed factor
+#define BETA 100.0 //boid speed factor
 
 #endif /* parameter_h */
