@@ -25,14 +25,14 @@ int tim = 0; //time
 int mouseState = 0; //0 is not pressed, 1 is distractor, 2 is attractor
 double mouseX = 0.0;
 double mouseY = 0.0;
-double mouseZ = 0.0;
-GLfloat light0pos[] = {0.0, 0.0, BOUNDARY, 1.0};
-GLfloat light1pos[] = {0.0, 0.0, BOUNDARY, 1.0};
+double mouseZ = 0.5*BOUNDARY;
+GLfloat light0pos[] = {0.0, 0.0, -0.8*BOUNDARY, 1.0};
+GLfloat light1pos[] = {0.0, 0.0, -0.8*BOUNDARY, 1.0};
 
 GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
 GLfloat red[] = {0.8, 0.2, 0.2, 1.0};
 GLfloat blue[] = {0.0, 0.0, 1.0, 0.6};
-GLfloat white[] = {0.5, 0.5, 0.5, 0.4};
+GLfloat white[] = {1.0, 1.0, 1.0, 0.8};
 
 double calcDist(double x1, double y1, double z1, double x2, double y2, double z2)
 {
@@ -75,15 +75,9 @@ void addConnections(std::pair<int, int> newConnection)
     boidConnections.erase(result, boidConnections.end());
 }
 
-void removeAllConnections()
-{
-    boidConnections.clear();
-}
+void removeAllConnections(){ boidConnections.clear(); }
 
-double degreeToRadian(double deg)
-{
-    return deg * M_PI / 180.0;
-}
+double degreeToRadian(double deg){ return deg * M_PI / 180.0; }
 
 //this needs for Biod::isVisible
 double _viewAngle = degreeToRadian(THETA_1) / 2.0;
@@ -108,10 +102,6 @@ BaseBoid updateSpeedAndAngle(BaseBoid& boid)
         if (boid.isVisible(boids[i].x, boids[i].y, boids[i].z, _viewAngle))
         {
             /*boidが見える範囲内にいる*/
-//            if (boid.id == 0)
-//            {
-//                boids[i].setColor(0.0, 1.0, 1.0);
-//            }
             if (dist - boid.size - boids[i].size < R_1)
             {
                 int first;
@@ -120,9 +110,7 @@ BaseBoid updateSpeedAndAngle(BaseBoid& boid)
                 {
                     first = boid.id;
                     second = boids[i].id;
-                }
-                else
-                {
+                } else {
                     first = boids[i].id;
                     second = boid.id;
                 }
@@ -131,30 +119,18 @@ BaseBoid updateSpeedAndAngle(BaseBoid& boid)
                 /*rule1*/
                 n1++;
                 q1 += boids[i].vctr.normalized();
-//                if (boid.id == 0)
-//                {
-//                    boids[i].setColor(1.0, 1.0, 0.0);
-//                }
             }
             if (dist - boid.size - boids[i].size < R_2)
             {
                 /*rule2*/
                 n2++;
                 q2 += Eigen::Vector3d(boids[i].x - boid.x, boids[i].y - boid.y, boids[i].z - boid.z) / dist / dist * R_2;
-//                if (boid.id == 0)
-//                {
-//                    boids[i].setColor(1.0, 1.0, 0.0);
-//                }
             }
             if (dist - boid.size - boids[i].size < R_3)
             {
                 /*rule3*/
                 n3++;
                 q3 += Eigen::Vector3d(boids[i].x - boid.x, boids[i].y - boid.y, boids[i].z - boid.z) / dist / dist * R_3;
-//                if (boid.id == 0)
-//                {
-//                    boids[i].setColor(0.0, 1.0, 0.0);
-//                }
             }
         }
     }
@@ -196,51 +172,21 @@ BaseBoid updateSpeedAndAngle(BaseBoid& boid)
             }
         }
     }
-    if (n1 != 0)
-    {
-        q1 /= double(n1);
-    }
-    if (n2 != 0)
-    {
-        q2 /= double(n2);
-    }
-    if (n3 != 0)
-    {
-        q3 /= double(n3);
-    }
-    if (n4 != 0)
-    {
-        q4 /= double(n4);
-    }
+    if (n1 != 0) { q1 /= q1.norm(); }
+    if (n2 != 0) { q2 /= double(n2); }
+    if (n3 != 0) { q3 /= double(n3); }
+    if (n4 != 0) { q4 /= double(n4); }
     
     /*wall repel*/
     Eigen::Vector3d wallRepel = Eigen::Vector3d::Zero();
     double wall = BOUNDARY - WALL_SIZE;
     double bound = wall - BOID_SIZE - R_4;
-    if (boid.x >= bound)
-    {
-        wallRepel.x() = 1.0 / (wall - boid.x);
-    }
-    else if (boid.x <= -bound)
-    {
-        wallRepel.x() = -1.0 / (wall + boid.x);
-    }
-    if (boid.y >= bound)
-    {
-        wallRepel.y() = 1.0 / (wall - boid.y);
-    }
-    else if (boid.y <= -bound)
-    {
-        wallRepel.y() = -1.0 / (wall + boid.y);
-    };
-    if (boid.z >= bound)
-    {
-        wallRepel.z() = 1.0 / (wall - boid.z);
-    }
-    else if (boid.z <= -bound)
-    {
-        wallRepel.z() = -1.0 / (wall + boid.z);
-    }
+    if (boid.x >= bound)    {        wallRepel.x() = 1.0 / (wall - boid.x);    }
+    else if (boid.x <= -bound)    {        wallRepel.x() = -1.0 / (wall + boid.x);    }
+    if (boid.y >= bound)    {        wallRepel.y() = 1.0 / (wall - boid.y);    }
+    else if (boid.y <= -bound)    {        wallRepel.y() = -1.0 / (wall + boid.y);    };
+    if (boid.z >= bound)    {        wallRepel.z() = 1.0 / (wall - boid.z);    }
+    else if (boid.z <= -bound)    {        wallRepel.z() = -1.0 / (wall + boid.z);    }
     Eigen::Vector3d V = ALPHA_1 * q1.normalized() + ALPHA_2 * q2 - ALPHA_3 * q3 - ALPHA_4 * q4 + ALPHA_5 * boid.vctr.normalized() - REPEL_WALL_WEIGHT * wallRepel;
     Direction dir = Direction(V);
     boid.angleY = dir.angleY;
@@ -445,7 +391,7 @@ void display(void)
     glLightfv(GL_LIGHT1, GL_POSITION, light1pos);
     
     drawWall();
-    drawConnections();
+//    drawConnections();
     for (auto boid : boids)
     {
         boid.drawBaseBoid();
@@ -479,7 +425,7 @@ void display(void)
         glTranslated(mouseX,mouseY, mouseZ);
         double angle = double(tim % 36)*10.0;
         glRotated(angle, 0.0, 1.0, 0.0);
-        glutSolidTeapot(MOUSE_SIZE);
+        glutSolidCube(MOUSE_SIZE);
         glPopMatrix();
     }
     glFlush();
@@ -503,29 +449,25 @@ void resize(int w, int h)
 
  void mouse(int button, int state, int x, int y)
  {
-// double pos_x = BOUNDARY * (double(x) - WINDOW_SIZE / 2.0) / double(WINDOW_SIZE / 2.0);
-// double pos_y = -BOUNDARY * (double(y) - WINDOW_SIZE / 2.0) / double(WINDOW_SIZE / 2.0);
- if (state == GLUT_DOWN)
- {
- if (button == GLUT_LEFT_BUTTON)
- {
- std::cout << "distractor" << std::endl;
-// mouseX = pos_x;
-// mouseY = pos_y;
- mouseState = 1;
- }
- if (button == GLUT_RIGHT_BUTTON)
- {
- std::cout << "attractor" << std::endl;
-// mouseX = pos_x;
-// mouseY = pos_y;
- mouseState = 2;
- }
- }
- else
- {
- mouseState = 0;
- }
+    // double pos_x = BOUNDARY * (double(x) - WINDOW_SIZE / 2.0) / double(WINDOW_SIZE / 2.0);
+    // double pos_y = -BOUNDARY * (double(y) - WINDOW_SIZE / 2.0) / double(WINDOW_SIZE / 2.0);
+     if (state == GLUT_DOWN)
+     {
+         if (button == GLUT_LEFT_BUTTON)
+         {
+             std::cout << "distractor" << std::endl;
+            // mouseX = pos_x;
+            // mouseY = pos_y;
+             mouseState = 1;
+         }
+         if (button == GLUT_RIGHT_BUTTON)
+         {
+             std::cout << "attractor" << std::endl;
+            // mouseX = pos_x;
+            // mouseY = pos_y;
+             mouseState = 2;
+         }
+     }
  }
  
 

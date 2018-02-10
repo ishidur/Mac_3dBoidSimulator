@@ -53,9 +53,11 @@ void BaseBoid::setColor(double red, double green, double blue)
 
 void renderBoid(double size)
 {
-    //	glRotated(90.0, 0.0, 1.0, 0.0);
-    //	glutSolidCone(0.4 * BOID_SIZE * sqrt(3.0) / 2.0, BOID_SIZE, 10, 10);
-    glutSolidTeapot(size);
+    glPushMatrix();
+    glRotated(90.0, 0.0, 1.0, 0.0);
+    glutSolidCone(0.4 * BOID_SIZE * sqrt(3.0) / 2.0, BOID_SIZE, 10, 10);
+    glPopMatrix();
+//    glutSolidTeapot(size);
 }
 
 void BaseBoid::drawBaseBoid()
