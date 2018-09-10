@@ -39,7 +39,6 @@
 		0F82DA291EC7FA1E005AA181 /* Block.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Block.hpp; sourceTree = "<group>"; };
 		0F82DA2A1EC7FA1E005AA181 /* Direction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Direction.cpp; sourceTree = "<group>"; };
 		0F82DA2B1EC7FA1E005AA181 /* Direction.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Direction.hpp; sourceTree = "<group>"; };
-		0F82DA2C1EC7FA1E005AA181 /* Eigen */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Eigen; sourceTree = "<group>"; };
 		0F82DA2D1EC7FA1E005AA181 /* Grid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Grid.cpp; sourceTree = "<group>"; };
 		0F82DA2E1EC7FA1E005AA181 /* Grid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Grid.hpp; sourceTree = "<group>"; };
 		0F82DA2F1EC7FA1E005AA181 /* parameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parameter.h; sourceTree = "<group>"; };
@@ -84,7 +83,6 @@
 				0F82DA291EC7FA1E005AA181 /* Block.hpp */,
 				0F82DA2A1EC7FA1E005AA181 /* Direction.cpp */,
 				0F82DA2B1EC7FA1E005AA181 /* Direction.hpp */,
-				0F82DA2C1EC7FA1E005AA181 /* Eigen */,
 				0F82DA2D1EC7FA1E005AA181 /* Grid.cpp */,
 				0F82DA2E1EC7FA1E005AA181 /* Grid.hpp */,
 				0F82DA2F1EC7FA1E005AA181 /* parameter.h */,
@@ -211,6 +209,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "eigen-git-mirror/";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -253,6 +252,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "eigen-git-mirror/";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
@@ -292,6 +292,7 @@
 				0F82DA201EC7F980005AA181 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
